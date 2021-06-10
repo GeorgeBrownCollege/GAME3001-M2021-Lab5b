@@ -43,6 +43,8 @@ private:
 	bool m_isGridEnabled;
 	
 	void m_buildGrid();
+	void m_computeTileCosts();
+	
 	void m_setGridEnabled(bool state);
 	bool m_getGridEnabled() const;
 

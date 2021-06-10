@@ -73,6 +73,8 @@ void PlayScene::start()
 	m_pStarShip->setGridPosition(1, 3);
 	addChild(m_pStarShip);
 
+	m_computeTileCosts();
+
 	ImGuiWindowFrame::Instance().setGUIFunction(std::bind(&PlayScene::GUI_Function, this));
 }
 
@@ -120,6 +122,7 @@ void PlayScene::GUI_Function()
 
 		m_pTarget->getTransform()->position = m_getTile(goal_position[0], goal_position[1])->getTransform()->position + offset;
 		m_pTarget->setGridPosition(goal_position[0], goal_position[1]);
+		m_computeTileCosts();
 	}
 
 	ImGui::Separator();
@@ -203,6 +206,16 @@ void PlayScene::m_buildGrid()
 				tile->setNeighbourTile(LEFT_TILE, m_getTile(col - 1, row));
 			}
 		}
+	}
+}
+
+void PlayScene::m_computeTileCosts()
+{
+	for (auto tile : m_pGrid)
+	{
+		// Compute Euclidean grid distance for each tile and the target
+		auto distance = Util::distance(tile->getGridPosition(), m_pTarget->getGridPosition());
+		tile->setTileCost(distance);
 	}
 }
 
