@@ -45,6 +45,11 @@ private:
 	
 	void m_buildGrid();
 	void m_computeTileCosts();
+
+	//TODO:
+	// void m_findShortestPath();
+	// void m_displayPathList();
+	// void m_moveShipAlongPath();
 	
 	void m_setGridEnabled(bool state);
 	bool m_getGridEnabled() const;
@@ -55,6 +60,13 @@ private:
 
 	// heuristic
 	Heuristic m_currentHeuristic;
+
+	// potential data structures
+	// std::vector<Tile*> m_pOpenList;
+	// std::vector<Tile*> m_pClosedList;
+	// std::vector<Tile*> m_pPathList;
+
+	// Path of Visibility? or LOS? as an optimization
 	
 
 };
