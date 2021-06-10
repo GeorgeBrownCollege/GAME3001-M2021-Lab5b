@@ -60,6 +60,7 @@ void PlayScene::start()
 	// Setup the Grid
 	m_buildGrid();
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+	m_currentHeuristic = EUCLIDEAN;
 	
 	// Add Target to Scene
 	m_pTarget = new Target();
@@ -94,6 +95,20 @@ void PlayScene::GUI_Function()
 	{
 		// toggle grid on/off
 		m_setGridEnabled(m_bToggleGrid);
+	}
+
+	ImGui::Separator();
+
+	static int radio = static_cast<int>(m_currentHeuristic);
+	ImGui::Text("Heuristic Type");
+	ImGui::RadioButton("Manhattan", &radio, static_cast<int>(MANHATTAN));
+	ImGui::SameLine();
+	ImGui::RadioButton("Euclidean", &radio, static_cast<int>(EUCLIDEAN));
+	
+	if(m_currentHeuristic != static_cast<Heuristic>(radio))
+	{
+		m_currentHeuristic = static_cast<Heuristic>(radio);
+		m_computeTileCosts();
 	}
 
 	ImGui::Separator();
@@ -211,10 +226,26 @@ void PlayScene::m_buildGrid()
 
 void PlayScene::m_computeTileCosts()
 {
+	float distance = 0.0f;
+	float dx = 0.0f;
+	float dy = 0.0f;
+	
 	for (auto tile : m_pGrid)
 	{
-		// Compute Euclidean grid distance for each tile and the target
-		auto distance = Util::distance(tile->getGridPosition(), m_pTarget->getGridPosition());
+		switch(m_currentHeuristic)
+		{
+		case MANHATTAN:
+			// Compute Manhattan grid distance for each tile and the target
+			dx = abs(tile->getGridPosition().x - m_pTarget->getGridPosition().x);
+			dy = abs(tile->getGridPosition().y - m_pTarget->getGridPosition().y);
+			distance = dx + dy;
+			break;
+		case EUCLIDEAN:
+			// Compute Euclidean grid distance for each tile and the target
+			distance = Util::distance(tile->getGridPosition(), m_pTarget->getGridPosition());
+			break;
+		}
+
 		tile->setTileCost(distance);
 	}
 }

@@ -2,6 +2,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
+#include "Heuristic.h"
 #include "Scene.h"
 #include "StarShip.h"
 #include "Target.h"
@@ -51,6 +52,9 @@ private:
 	// convenience functions
 	Tile* m_getTile(int col, int row);
 	Tile* m_getTile(glm::vec2 grid_position);
+
+	// heuristic
+	Heuristic m_currentHeuristic;
 	
 
 };
